@@ -1,0 +1,7 @@
+{
+  "name": "act-marketplace-module",
+  "version": "1.0.0",
+  "description": "MCP module for ACT Marketplace – creates,listens, and executes tasks assignment events and processes on all evm chains starting with BNB Chain.",
+  "author": "ACT Labs Team",
+  "license": "MIT"
+}
