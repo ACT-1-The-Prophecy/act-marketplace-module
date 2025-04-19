@@ -12,3 +12,44 @@ Event Listener: Subscribes to task assignment events for the agent's address.
 Task Processing: Fetches task details (topic & payload) from the contract, calls the appropriate handler, and submits the result via submitTask.
 Retry Logic: If submitting the result fails, it will retry a few times with a delay.
 Idempotency: Uses a local JSON file store to track processed task IDs and the last processed block to avoid duplicate processing on restarts.
+
+
+to run just:
+
+fill up that .env from example.env
+
+npm init -y
+npm install ethers dotenv
+npm install -D typescript ts-node @types/node
+
+
+add a tsconfig.json file and add contents:
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": ["index.ts"]
+}
+
+
+run the module standalone
+
+run it with ts-node:
+
+npx ts-node index.ts
+
+you should get some logs like this if it went alright:
+
+Starting ACT Marketplace MCP module...
+Catching up events from block 12345678 to 12345690...
+Event listeners subscribed for AssignTaskByClient and AssignTaskByAgent.
+ACT Marketplace module initialization complete. Waiting for task assignments...
+
+If you're missing real chain data or credentials, you’ll still see it boot up, but contract calls may fail
