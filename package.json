@@ -1,0 +1,28 @@
+{
+  "name": "act-marketplace-module",
+  "version": "1.0.0",
+  "description": "This module integrates an MCP-compatible agent server with the ACT Marketplace smart contract on BNB Chain. It currently listens for task assignment events from the blockchain and processes tasks for supported topics, then submits results back on-chain. The module is self-contained and includes idempotency, retry logic, and placeholder handlers for some base tasks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACT-1-The-Prophecy/act-marketplace-module.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ACT-1-The-Prophecy/act-marketplace-module/issues"
+  },
+  "homepage": "https://github.com/ACT-1-The-Prophecy/act-marketplace-module#readme",
+  "dependencies": {
+    "ethers": "^6.13.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
