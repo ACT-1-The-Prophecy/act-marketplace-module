@@ -1,55 +1,111 @@
-This module integrates an MCP-compatible agent server with the ACT Marketplace smart contract on BNB Chain. It currently listens for task assignment events from the blockchain and processes tasks for supported topics, then submits results back on-chain. The module is self-contained and includes idempotency, retry logic, and placeholder handlers for some base tasks.
+# ACT Marketplace MCP Server
 
-module.json
+This project implements a Model Context Protocol (MCP) server that provides access to the ACT Marketplace API in read-only mode. It allows LLM applications to interact with your marketplace data using the standardized MCP protocol.
 
-This JSON file provides basic metadata about the module. It can be used by the MCP server to identify the module.
+## Overview
 
-index.ts
+The Model Context Protocol allows applications to provide context for LLMs in a standardized way. This server exposes the following functionality:
 
-This TypeScript file is the entry point of the module. It connects to a BNB Chain RPC, subscribes to the ACT Marketplace contract events (AssignTaskByAgent and AssignTaskByClient), and defines handlers for each supported topic. The code uses ethers.js for blockchain interactions and includes:
-Configuration: Default RPC URL (BSC testnet), placeholders for contract address and keys, and configurable block numbers.
-Event Listener: Subscribes to task assignment events for the agent's address.
-Task Processing: Fetches task details (topic & payload) from the contract, calls the appropriate handler, and submits the result via submitTask.
-Retry Logic: If submitting the result fails, it will retry a few times with a delay.
-Idempotency: Uses a local JSON file store to track processed task IDs and the last processed block to avoid duplicate processing on restarts.
+### Resources
 
+- `agent://{address}` - Get agent information by address
+- `agent-metadata://{address}` - Get agent metadata by address
+- `task://{id}` - Get task details by ID
 
-to run just:
+### Tools
 
-fill up that .env from example.env
+- `search-agents` - Search for agents using various criteria
+- `search-tasks` - Search for tasks using various criteria
 
-npm init -y
-npm install ethers dotenv
-npm install -D typescript ts-node @types/node
+## Setup
 
+1. Install dependencies:
 
-add a tsconfig.json file and add contents:
+```bash
+npm install
+```
 
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+2. Create a `.env` file with your credentials:
+
+```
+API_BASE_URL=https://your-act-api-url.com
+ACT_USERNAME=your-email@example.com
+ACT_PASSWORD=your-password
+```
+
+3. Build the project:
+
+```bash
+npm run build
+```
+
+4. Start the server:
+
+```bash
+npm start
+```
+
+## Usage with LLM Applications
+
+This server can be used with any MCP-compatible LLM application. It primarily works through stdio, which makes it suitable for command-line integration.
+
+### Example Connection (Node.js Client)
+
+```javascript
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+
+const transport = new StdioClientTransport({
+  command: "node",
+  args: ["dist/index.js"],
+});
+
+const client = new Client({
+  name: "example-client",
+  version: "1.0.0",
+});
+
+await client.connect(transport);
+
+// Get agent information
+const agent = await client.readResource({
+  uri: "agent://0x1234567890abcdef1234567890abcdef12345678",
+});
+
+// Search for tasks
+const searchResult = await client.callTool({
+  name: "search-tasks",
+  arguments: {
+    topic: "AI",
+    limit: 5,
   },
-  "include": ["index.ts"]
-}
+});
+```
 
+## Features
 
-run the module standalone
+- **Read-only access**: Ensures data integrity by only allowing read operations
+- **Standardized protocol**: Uses the Model Context Protocol for LLM interactions
+- **Authentication handling**: Manages API authentication and token refresh automatically
+- **Flexible querying**: Supports searching tasks and agents with various filters
 
-run it with ts-node:
+## Technical Details
 
-npx ts-node index.ts
+This server is built using:
 
-you should get some logs like this if it went alright:
+- Model Context Protocol SDK v1.4.0
+- TypeScript
+- Node.js
+- stdio transport (suitable for direct integration with LLM applications)
 
-Starting ACT Marketplace MCP module...
-Catching up events from block 12345678 to 12345690...
-Event listeners subscribed for AssignTaskByClient and AssignTaskByAgent.
-ACT Marketplace module initialization complete. Waiting for task assignments...
+## Cloud Integration
 
-If you're missing real chain data or credentials, you’ll still see it boot up, but contract calls may fail
+For integrating with Cloud environments, you can:
+
+1. Deploy this server as a microservice
+2. Configure environment variables for authentication
+3. Connect LLM applications using the appropriate transport
+
+## License
+
+ISC
