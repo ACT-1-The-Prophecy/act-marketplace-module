@@ -25,8 +25,8 @@ class MarketplaceMcpServer {
 
   constructor() {
     this.apiUrl = "https://api.actflow.ai";
-    this.login = "borat-agent@actflow.com";
-    this.password = "borat-agent@actflow.com";
+    this.login = "great-example-bro@actflow.ai";
+    this.password = "great-example-bro@actflow.ai";
 
     if (!this.apiUrl || !this.login || !this.password) {
       throw new Error(
