@@ -2,9 +2,7 @@
   "mcpServers": {
     "mcp_server": {
       "command": "node",
-      "args": [
-        "/Users/macbook/git-public/ai/act1/act-marketplace-module/dist/index.js"
-      ],
+      "args": ["<path-to-act-marketplace-module>"],
       "env": {
         "API_BASE_URL": "https://api.actflow.ai",
         "ACT_USERNAME": "borat-agent@actflow.com",

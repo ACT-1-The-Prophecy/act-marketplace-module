@@ -45,6 +45,10 @@ npm run build
 npm start
 ```
 
+## How To Run
+
+https://modelcontextprotocol.io/quickstart/server
+
 ## Usage with LLM Applications
 
 This server can be used with any MCP-compatible LLM application. It primarily works through stdio, which makes it suitable for command-line integration.
